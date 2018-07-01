@@ -1,0 +1,93 @@
+fully decentralized system
+identity management
+"everything" is an entity that can be referenced
+services have manifest APIs and can self-document them
+  OpenAPI
+  standardized location for the APIs
+services can auto-register with a service registry
+service registries rely on id servers to define their users
+service registries record a service's source repo
+id servers and service registries are just services, so expose their APIs like all others
+uses HTTPS with servers as their own CAs
+
+All services must implement the following API
+  GET /trusted-id-servers
+    200 list of ID servers that the service trusts
+  GET /info
+    200 provides aggregate of info properties, together with a service-registries info list
+  GET /info/<standard-info-property-from-service-registry-entry>
+  GET /api
+    200 provides OpenAPI info on the full capabilities of the service (from the /api path down)
+    
+
+at minimum we need to provide
+  ID server
+    Main Interactions:
+      Use internal protocol for getting an ID on the server
+      Use authentication protocol for using a service
+    Authentication Protocol:
+      POST /users/<user-id>/authentication-tokens
+        Content: Name for the token you wish to create
+        Authorization Header = login info for the ID server
+        Responses:
+          201 returns the URI of the token
+      GET /users/<user-id>/authentication-tokens/<token-id>
+        Authorization Header = login info for the ID server
+        Responses:
+          200 returns the name of the token + the token itself
+    Other end points:
+      GET /users/<user-id>
+        Authorization Header = login info for the ID server
+        200 returns the users info, aggregate of all the <user-info-property> info
+      GET /user/<user-id>/<user-info-property>
+        Authorization Header = login info for the ID server
+        200 returns the users info for the named property
+        Standard values for <user-info-property>:
+          nyms
+          public-keys
+          contact-methods
+      PUT or PATCH? /user/<user-id>/<user-info-property>
+        Content: New value for the property
+        Authorization Header = login info for the ID server
+      GET /user/<user-id>/additional-info
+          Authorization Header = login info for the ID server
+          200 returns the users additional info
+      GET /user/<user-id>/additional-info/<custom-property>
+          Authorization Header = login info for the ID server
+          200 returns the additional info for the named property
+      PUT or PATCH? /user/<user-id>/additional-info/<custom-property>
+        Content: New value for the property
+        Authorization Header = login info for the ID server
+  Service Registry server
+    Main Interactions:
+      Registering a service
+      Unregistering a service
+      Getting a list of services
+      Getting service info
+    End points:
+      GET /services
+        200 list of services that are registered, w/ basic info about them
+        Basic Info is Service ID, Name, Running Status, Description
+      GET /services/<service-id>
+        200 returns the service info, aggregate of all the <service-info-property> info
+      GET /services/<service-id>/<service-info-property>
+        200 returns the service info for the named property
+        Standard values for <service-info-property>:
+          id
+          name
+          status
+          description
+          location
+          registrants
+          source-repository
+      GET /services/<service-id>/additional-info
+        200 returns the services additional info
+      GET /services/<services-id>/additional-info/<custom-property>
+        200 returns the additional info for the named property
+      PUT or PATCH? for the above does the obvious stuff
+      PUT /services
+        Content: standard service info except id and status, additional info
+        200 returns the service id
+        During handling this request, the service registry goes through a standard handshake process with the service to confirm that the service is who the POST info claims it is
+      DELETE /services/<service-id>
+        200 removes a service
