@@ -24,7 +24,12 @@ All services must implement the following API
   GET /log/<log-item-id>
     200 provides detailed information about the specified action
     log item information should be enough to completely re-create the action if the system was rolled back before that action, minus authentication info
+      eg endpoint, arguments/content of request, url parameters, etc.
     log item information also must record the user who created it, the time of the action, and some information about the result. any generated data that's not predictable from the parameters of the input must also be recorded
+  GET /stream
+    Parameters: event filters
+      filters: by user id, by endpoint
+    Result: maintains an open connection and streams event data out in near-real-time
     
 
 at minimum we need to provide
