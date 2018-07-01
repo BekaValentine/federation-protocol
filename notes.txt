@@ -11,6 +11,7 @@ id servers and service registries are just services, so expose their APIs like a
 uses HTTPS with servers as their own CAs
 
 All services must implement the following API
+  a USER is an ID-server + User-id on that server
   GET /trusted-id-servers
     200 list of ID servers that the service trusts
   GET /info
@@ -18,6 +19,12 @@ All services must implement the following API
   GET /info/<standard-info-property-from-service-registry-entry>
   GET /api
     200 provides OpenAPI info on the full capabilities of the service (from the /api path down)
+  GET /log
+      200 provides aggregate listing of actions taken by users on this server
+  GET /log/<log-item-id>
+    200 provides detailed information about the specified action
+    log item information should be enough to completely re-create the action if the system was rolled back before that action, minus authentication info
+    log item information also must record the user who created it, the time of the action, and some information about the result. any generated data that's not predictable from the parameters of the input must also be recorded
     
 
 at minimum we need to provide
