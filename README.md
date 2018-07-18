@@ -36,6 +36,6 @@ In accordance with the above ideas, we have the following design principles:
 
 4. Services must provide both human readable and machine readable specs for their complete API. No functionality that is exposed to the world can be left undocumented.
 
-5. Services must provide means of logging who's done what. This log must be accessible to everyone in the community.
+5. Services must provide means of logging who's done what public action. This log must be accessible to everyone in the community. Not all actions must be public, for instance, messaging systems need not be public, but ones which have accountability implications should be.
 
 6. Services should allow anyone on the communities trusted ID servers to use them. Restricting access in any way is bad, and services and accountability should be set up so that this is not necessary.
