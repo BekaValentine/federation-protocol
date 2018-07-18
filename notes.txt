@@ -18,7 +18,7 @@ All services must implement the following API
     200 provides aggregate of info properties, together with a service-registries info list
   GET /info/<standard-info-property-from-service-registry-entry>
   GET /api
-    200 provides OpenAPI info on the full capabilities of the service (from the /api path down)
+    200 provides OpenAPI info on the full capabilities of the service (from the / path down)
   GET /log
       200 provides aggregate listing of actions taken by users on this server
   GET /log/<log-item-id>
